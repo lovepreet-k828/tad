@@ -138,6 +138,6 @@ async def get_net_image_prediction(footage_video: str = "", email_id: str=""):
         "Result":"Done"
     }
 
-# if __name__ == "__main__":
-#     port = int(os.environ.get('PORT', 5000))
-#     run(app, host="0.0.0.0", port=port)
+if __name__ == "__main__":
+     port = int(os.environ.get('PORT', 5000))
+     run(app, host="0.0.0.0", port=port)
