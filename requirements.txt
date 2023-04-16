@@ -5,3 +5,4 @@ pytz
 uvicorn
 fastapi
 moviepy
+firebase_admin
