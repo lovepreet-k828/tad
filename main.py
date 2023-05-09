@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Body
 from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 import numpy as np
@@ -66,9 +66,10 @@ async def root():
     return {"message": "Welcome to the Food Vision API!"}
 
 @app.post("/accident_detection/")
-async def get_net_image_prediction(data: dict) -> dict:
-    footage_video=data[footage_video] 
-    email_id=data[email_id]
+async def get_net_image_prediction(resp=Body()):
+    data=resp['body']
+    footage_video=data['footage_video'] 
+    email_id=data['email_id']
     if footage_video == "":
         return {"message": "No video provided"}
     if email_id == "":
