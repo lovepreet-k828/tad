@@ -66,7 +66,9 @@ async def root():
     return {"message": "Welcome to the Food Vision API!"}
 
 @app.post("/accident_detection/")
-async def get_net_image_prediction(footage_video: str = "", email_id: str=""):
+async def get_net_image_prediction(data: dict) -> dict:
+    footage_video=data[footage_video] 
+    email_id=data[email_id]
     if footage_video == "":
         return {"message": "No video provided"}
     if email_id == "":
