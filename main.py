@@ -85,6 +85,7 @@ async def get_net_image_prediction(footage_video: str = "", email_id: str=""):
 
     image=[]
     label=[]
+    result=[]
     cap = cv2.VideoCapture(footage_video)
     fps = cap.get(cv2. CAP_PROP_FPS)
     filename = time.strftime("%Y%m%d%H%M%S",time.localtime())+".mp4"
@@ -115,6 +116,7 @@ async def get_net_image_prediction(footage_video: str = "", email_id: str=""):
             blob.upload_from_filename(filename)
             blob.make_public()
             video_link=blob.public_url
+            result.append(video_link)
             print("your file url", video_link)
             datetime_NY = datetime.now(tz_NY)  
             subject = "Accident Detected at India time:"+ datetime_NY.strftime("%Y-%m-%d %H:%M") 
@@ -135,7 +137,7 @@ async def get_net_image_prediction(footage_video: str = "", email_id: str=""):
     s.quit()
     
     return {
-        "Result":"Done"
+        "Result":result
     }
 
 if __name__ == "__main__":
