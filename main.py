@@ -69,6 +69,12 @@ async def root():
 async def get_net_image_prediction(data=Body()):
     footage_video=data['footage_video'] 
     email_id=data['email_id']
+    nlocation=data['location']
+    glocation=data['glocation']
+    if(nlocation!=""):
+        nlocation = "\nNear by location: "+nlocation
+    if(glocation!=""):
+        glocation = "\nLocation on Google maps: "+nlocation
     if footage_video == "":
         return {"message": "No video provided"}
     if email_id == "":
@@ -94,6 +100,10 @@ async def get_net_image_prediction(data=Body()):
     clip = VideoFileClip(footage_video)
     start=time.time()
     limit = 0
+    acc_time = ""
+    id = ""
+    ids=[]
+    acc_times=[]
     while True:
         grabbed, frame = cap.read()
         c=c+1
@@ -121,14 +131,18 @@ async def get_net_image_prediction(data=Body()):
             result.append(video_link)
             print("your file url", video_link)
             datetime_NY = datetime.now(tz_NY)  
-            subject = "Accident Detected at India time:"+ datetime_NY.strftime("%Y-%m-%d %H:%M") 
-            text ="Accident Details \nDate & Time: "+datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")+"\nClip link: " +video_link 
+            acc_time = datetime_NY.strftime("%Y-%m-%d %H:%M")
+            id = time.strftime("%Y%m%d%H%M%S",time.localtime())
+            acc_times.append(acc_time)
+            ids.append(id)
+            subject = "Accident Detected at India time:"+ acc_time 
+            text ="Accident Details \nDate & Time: "+datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")+"\nClip link: " +video_link +nlocation+glocation+"\n Clip Id: "+id
             message = """From: %s\nTo: %s\nSubject: %s\n\n%s
             """ % (sender, ", ".join(receivers), subject, text)
             s.sendmail(sender, receivers, message)
             filename='./'+filename
             os.remove(filename)
-            filename=time.strftime("%Y%m%d%H%M%S",time.localtime())+".mp4"
+            filename= id+".mp4"
             fps=fps*5
             while c<fps:
                 grabbed, frame = cap.read()
@@ -139,7 +153,9 @@ async def get_net_image_prediction(data=Body()):
     s.quit()
     
     return {
-        "Result":result
+        "Result":result,
+        "Id":ids,
+        "acc_time":acc_times
     }
 
 if __name__ == "__main__":
