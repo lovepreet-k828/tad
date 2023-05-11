@@ -15,7 +15,7 @@ import os
 
 app = FastAPI()
 
-origins = ["*"]
+origins = ["*",'wss://3000-lovepreetk8-tadfrontend-wj2jqh7y8nz.ws-us97.gitpod.io:3000/ws']
 methods = ["*"]
 headers = ["*"]
 
