@@ -136,7 +136,7 @@ async def get_net_image_prediction(data=Body()):
             acc_times.append(acc_time)
             ids.append(id)
             subject = "Accident Detected at India time:"+ acc_time 
-            text ="Accident Details \nDate & Time: "+datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")+"\nClip link: " +video_link +nlocation+glocation+"\n Clip Id: "+id
+            text ="Accident Details \nMode: Recorded Video\nDate & Time: "+datetime_NY.strftime("%Y-%m-%d %H:%M:%S.%f")+"\nClip link: " +video_link +nlocation+glocation+"\n Clip Id: "+id
             message = """From: %s\nTo: %s\nSubject: %s\n\n%s
             """ % (sender, ", ".join(receivers), subject, text)
             s.sendmail(sender, receivers, message)
