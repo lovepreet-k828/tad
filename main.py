@@ -55,7 +55,21 @@ def predict_frame(img):
     else:
         return("No Accident")
     
+def base64_to_image(base64_string):
 
+    """
+    The base64_to_image function accepts a base64 encoded string and returns an image.
+    The function extracts the base64 binary data from the input string, decodes it, converts 
+    the bytes to numpy array, and then decodes the numpy array as an image using OpenCV.    
+    :param base64_string: Pass the base64 encoded image string to the function
+    :return: An image
+    """
+
+    base64_data = base64_string.split(",")[1]
+    image_bytes = base64.b64decode(base64_data)
+    image_array = np.frombuffer(image_bytes, dtype=np.uint8)
+    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+    return image
 
 
 bucket = storage.bucket('tadbml.appspot.com')
@@ -64,6 +78,16 @@ bucket = storage.bucket('tadbml.appspot.com')
 @app.get("/")
 async def root():
     return {"message": "Welcome to the Food Vision API!"}
+
+@app.post("/r_accident_detection/")
+async def rad(data=Body()):
+    image=data['image']
+    image=base_64_image(image)
+    resized_frame=tf.keras.preprocessing.image.smart_resize(image, (250, 250), interpolation='bilinear')
+    result=predict_frame(resized_frame)
+    return {
+        "result":result
+        }
 
 @app.post("/accident_detection/")
 async def get_net_image_prediction(data=Body()):
@@ -113,8 +137,9 @@ async def get_net_image_prediction(data=Body()):
        # print(c)
             resized_frame=tf.keras.preprocessing.image.smart_resize(frame, (250, 250), interpolation='bilinear')
             key_time = key_time + time.time()-start
-            image.append(frame)
             label.append(predict_frame(resized_frame))
+          #  image.append(frame)
+            
             
         end=time.time()-start+5
         if end>clip.duration-2:
