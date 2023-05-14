@@ -28,7 +28,7 @@ app.add_middleware(
 )
 
 from firebase_admin import credentials, initialize_app, storage
-cred_file_path = "./tadbml-firebase-adminsdk-a54ib-b3bca638e0.json"
+cred_file_path = "/etc/secrets/tadbml-firebase-adminsdk-a54ib-b3bca638e0.json"
 cred = credentials.Certificate(cred_file_path)
 initialize_app(cred)
 
